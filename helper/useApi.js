@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 
-function useApi(url, options) {
+function useApi() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (url, options) => {
       try {
         fetch(url, options).then(response => {
             if (!response.ok) {
@@ -27,10 +26,7 @@ function useApi(url, options) {
       }
     };
 
-    fetchData();
-  }, []);
-
-  return { data, loading, error };
+  return { data, loading, error, fetchData };
 }
 
 export default useApi;

@@ -1,28 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+//hooks
+import useApi from "helper/useApi.js";
 
 // components
 
-import CardTable from "components/Cards/CardTable.js";
+import CardTableCatalogs from "components/Cards/CardTableCatalogs.js";
 
 // layout for page
 
 import Admin from "layouts/Admin.js";
+export default function Estados({token}) {
+  const { data, loading, error, fetchData} = useApi();
+    
+  useEffect(()=>{
+      fetchData(
+          'https://api.condusef.gob.mx/sepomex/estados',
+          {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': token
+              }
+          }
+      );
+  }, [])
 
-export default function Estados() {
-  return (
-    <>
-      <div className="flex flex-wrap mt-4">
-        <div className="w-full  mb-12 px-4">
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
-        </div>
-        <div className="w-full  min-h-full mt-2mb-12 px-4">
-
-          <CardTable  />
-         
-        </div>
-      </div>
-    </>
-  );
+    return (
+        <>
+            <CardTableCatalogs color="dark" data={data.estados} title="Estados" headers={["Clave", "Estado"]} />
+        </>
+    );
 }
 
 Estados.layout = Admin;
